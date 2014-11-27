@@ -3,14 +3,24 @@ SilentCamera
 
 Take photo in the background without showing preview.
 
+
+
 Usage:
+
 // initialize SilentCamera with a return block
+
 SilentCamera *silentCamera = [[SilentCamera alloc] initWithCaptureReturnBlock:^(UIImage *image) {
+
     dispatch_async(dispatch_get_main_queue(), ^{
+
         ... // Do whatever you want with the image captured.
+
     });
+
 }];
+
 [slientCamera takePhoto];
+
 
 
 
