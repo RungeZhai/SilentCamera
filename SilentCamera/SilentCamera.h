@@ -14,6 +14,7 @@
 //  https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/04_MediaCapture.html#//apple_ref/doc/uid/TP40010188-CH5-SW30
 //  http://www.musicalgeometry.com/?p=1297
 //  http://stackoverflow.com/questions/10115716/avfoundation-capture-uiimage
+//  http://stackoverflow.com/questions/4401232/avfoundation-how-to-turn-off-the-shutter-sound-when-capturestillimageasynchrono
 //  NO License, Use at your own risk
 //
 
