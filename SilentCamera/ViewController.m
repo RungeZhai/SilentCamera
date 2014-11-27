@@ -32,8 +32,8 @@
 
     _silentCamera = [[SilentCamera alloc] initWithCaptureReturnBlock:^(UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            _imageView.image = image;// imageView is already a weak reference
-            _silentCamera = nil;
+            _imageView.image = image;   // imageView is already a weak reference
+            _silentCamera = nil;        // release it
         });
     }];
     
