@@ -18,7 +18,7 @@ Usage:
     [slientCamera takePhoto];
 
 
-
+The above is just a specification. As a matter of fact, silentCamera should not be a local variable as it should not be released after the call of takePhoto. Method takePhoto is async, that's why a block is needed.
 
 ![Alt][screenshot1_thumb]
 
