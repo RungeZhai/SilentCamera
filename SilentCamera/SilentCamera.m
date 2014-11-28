@@ -16,7 +16,6 @@
     bool _isCaptureSessionStarted;
     AVCaptureSession *session;
     AVCaptureDevice *frontCamera;
-//    AVAudioPlayer *invertedSound;
 }
 
 @end
@@ -60,7 +59,7 @@ static SystemSoundID soundID = 0;
 - (void)dealloc {
     [frontCamera removeObserver:self forKeyPath:@"adjustingExposure"];
     [frontCamera removeObserver:self forKeyPath:@"adjustingWhiteBalance"];
-//    [_output removeObserver:self forKeyPath:@"capturingStillImage"];
+    [_output removeObserver:self forKeyPath:@"capturingStillImage"];
     
     _videoConnection = nil;
     session = nil;
@@ -71,7 +70,15 @@ static SystemSoundID soundID = 0;
 // this will be called multiple times but normally one is enough, so _isCaptureSessionStarted is used to make this not reentrant
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-     if (!frontCamera.adjustingExposure && !frontCamera.adjustingWhiteBalance) {
+    if ([keyPath isEqualToString:@"capturingStillImage"]) {
+        // mute the camera. See https://gist.github.com/katokichisoft/6235b668829313d3478c/download#
+        if (soundID == 0) {
+            NSString *path = [[NSBundle mainBundle] pathForResource:@"photoShutter2" ofType:@"caf"];
+            NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
+            AudioServicesCreateSystemSoundID((__bridge CFURLRef)filePath, &soundID);
+        }
+        AudioServicesPlaySystemSound(soundID);
+    } else if (!frontCamera.adjustingExposure && !frontCamera.adjustingWhiteBalance) {
         if (_isCaptureSessionStarted) {
             NSLock *lock = [NSLock new];
             [lock lock];
@@ -80,10 +87,6 @@ static SystemSoundID soundID = 0;
             
             [self captureStillImage];
         }
-     } else if ([keyPath isEqualToString:@"capturingStillImage"]) {
-//         if (!invertedSound.isPlaying) {
-//             [invertedSound play];
-//         }
      }
 }
 
@@ -104,7 +107,7 @@ static SystemSoundID soundID = 0;
             
             // Captured image settings
             [_output setOutputSettings:[[NSDictionary alloc] initWithObjectsAndKeys:AVVideoCodecJPEG, AVVideoCodecKey, nil]];
-//            [self becomeSilentModeForCaptureOutput:_output];
+            [_output addObserver:self forKeyPath:@"capturingStillImage" options:0 context:NULL];// mute the camera using inverted sound
             
             if ([session canAddOutput:_output]) {
                 [session addOutput:_output];
@@ -139,14 +142,6 @@ static SystemSoundID soundID = 0;
 
 - (void) captureStillImage
 {
-    if (soundID == 0) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"photoShutter2" ofType:@"caf"];
-        NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef)filePath, &soundID);
-    }
-    AudioServicesPlaySystemSound(soundID);
-    
-    
     // fix orientation bug
     if ([_videoConnection isVideoOrientationSupported])
     {
@@ -155,7 +150,6 @@ static SystemSoundID soundID = 0;
     [_output captureStillImageAsynchronouslyFromConnection:_videoConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
         
         if ([session isRunning]) [session stopRunning];
-//        if ([invertedSound isPlaying]) [invertedSound stop];
         
         if (imageDataSampleBuffer != NULL) {
             NSData *bitmap = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
@@ -167,30 +161,5 @@ static SystemSoundID soundID = 0;
         }
     }];
 }
-
-
-/* 
- See https://gist.github.com/katokichisoft/6235b668829313d3478c/download#
- 
- this method is not working all right, may be the caf file is not right.
- I didn't delete the related lines code, just commented them. So if you want to test this. 
- Besides uncommenting this method, everything about invertedSound should be uncommented.
-*/
-
-//- (void)becomeSilentModeForCaptureOutput:(AVCaptureStillImageOutput *)imageOutput
-//{
-//    if (!invertedSound) {
-//        NSString *path = [[NSBundle mainBundle] pathForResource:@"photoShutter2"
-//                                                         ofType:@"caf"];
-//        NSURL *fileURL = [NSURL fileURLWithPath:path isDirectory:NO];
-//        invertedSound = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL
-//                                                                    error:NULL];
-//        [invertedSound prepareToPlay];
-//        
-//        [imageOutput addObserver:self
-//                      forKeyPath:@"capturingStillImage"
-//                         options:0 context:NULL];
-//    }
-//}
 
 @end
