@@ -24,7 +24,7 @@ Implementation 2:
 
     // initialize SilentCamera with a return block
 
-    QuietCamera quietCamera = [[QuietCamera alloc] initWithCamera:kCameraBack captureReturnBlock:^(UIImage *image) {
+    QuietCamera *quietCamera = [[QuietCamera alloc] initWithCamera:kCameraBack captureReturnBlock:^(UIImage *image) {
 
     ... // Do whatever you want with the image captured.
 
@@ -33,6 +33,7 @@ Implementation 2:
     [quietCamera takePhoto];
     
 
+Implementation 2 is absolutely no sound at all.
 
 The above is just a specification. As a matter of fact, silentCamera or quietCamera should not be a local variable as it should not be released after the call of takePhoto. Method takePhoto is async, that's why a block is needed.
 
