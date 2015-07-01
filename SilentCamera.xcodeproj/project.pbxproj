@@ -16,6 +16,7 @@
 		191AD0461A27078800842B37 /* SilentCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 191AD0451A27078800842B37 /* SilentCameraTests.m */; };
 		191AD0511A2708D100842B37 /* SilentCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 191AD0501A2708D100842B37 /* SilentCamera.m */; };
 		191AD05C1A273CAF00842B37 /* photoShutter2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 191AD05B1A273CAF00842B37 /* photoShutter2.caf */; };
+		196B070B1B43D13E002A834F /* QuietCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 196B070A1B43D13E002A834F /* QuietCamera.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,8 @@
 		191AD04F1A2708D100842B37 /* SilentCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SilentCamera.h; sourceTree = "<group>"; };
 		191AD0501A2708D100842B37 /* SilentCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SilentCamera.m; sourceTree = "<group>"; };
 		191AD05B1A273CAF00842B37 /* photoShutter2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = photoShutter2.caf; sourceTree = "<group>"; };
+		196B07091B43D13E002A834F /* QuietCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuietCamera.h; sourceTree = "<group>"; };
+		196B070A1B43D13E002A834F /* QuietCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuietCamera.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 			children = (
 				191AD04F1A2708D100842B37 /* SilentCamera.h */,
 				191AD0501A2708D100842B37 /* SilentCamera.m */,
+				196B07091B43D13E002A834F /* QuietCamera.h */,
+				196B070A1B43D13E002A834F /* QuietCamera.m */,
 				191AD02D1A27078800842B37 /* AppDelegate.h */,
 				191AD02E1A27078800842B37 /* AppDelegate.m */,
 				191AD0301A27078800842B37 /* ViewController.h */,
@@ -229,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				191AD0321A27078800842B37 /* ViewController.m in Sources */,
+				196B070B1B43D13E002A834F /* QuietCamera.m in Sources */,
 				191AD0511A2708D100842B37 /* SilentCamera.m in Sources */,
 				191AD02F1A27078800842B37 /* AppDelegate.m in Sources */,
 				191AD02C1A27078800842B37 /* main.m in Sources */,
@@ -290,6 +296,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -310,6 +317,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "5e1aa288-59de-4fdb-b444-10e4bebdc23d";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -332,7 +340,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -345,6 +354,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "5e1aa288-59de-4fdb-b444-10e4bebdc23d";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -356,10 +366,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lucy Ding (FP774LVZ88)";
 				INFOPLIST_FILE = SilentCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6cf81ff5-1932-456b-abde-8167c279b9dd";
 			};
 			name = Debug;
 		};
@@ -368,10 +380,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lucy Ding (FP774LVZ88)";
 				INFOPLIST_FILE = SilentCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6cf81ff5-1932-456b-abde-8167c279b9dd";
 			};
 			name = Release;
 		};

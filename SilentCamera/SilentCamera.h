@@ -18,8 +18,7 @@
 //  NO License, Use at your own risk
 //
 
-#import <Foundation/Foundation.h>
-#import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
 
 typedef void(^CaptureReturnBlock)(UIImage *image);
 
@@ -27,7 +26,7 @@ typedef void(^CaptureReturnBlock)(UIImage *image);
 
 @interface SilentCamera : NSObject
 
-@property (strong, nonatomic) CaptureReturnBlock captureReturnBlock;
+@property (copy, nonatomic) CaptureReturnBlock captureReturnBlock;
 
 - (id)initWithCaptureReturnBlock:(CaptureReturnBlock)captureReturnBlock;
 
