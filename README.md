@@ -6,7 +6,7 @@ Take photo in the background without showing preview.
 
 
 Usage:
-There are 2 kind of implementations.
+There are 2 kinds of implementations.
 
 Implementation 1:
 

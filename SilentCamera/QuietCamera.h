@@ -19,7 +19,7 @@ typedef void(^ResultBlock)(UIImage *image);
 @interface QuietCamera : NSObject
 
 @property (copy, nonatomic) ResultBlock captureReturnBlock;
-@property (nonatomic) int camera;
+@property (nonatomic) int camera;   // 0: front; 1: back
 
 - (id)initWithCamera:(int)camera captureReturnBlock:(ResultBlock)captureReturnBlock;
 
