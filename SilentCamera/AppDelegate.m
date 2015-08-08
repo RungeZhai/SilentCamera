@@ -3,7 +3,7 @@
 //  SilentCamera
 //
 //  Created by liuge on 11/27/14.
-//  Copyright (c) 2014 iLegendSoft. All rights reserved.
+//  Copyright (c) 2014 ZiXuWuYou. All rights reserved.
 //
 
 #import "AppDelegate.h"

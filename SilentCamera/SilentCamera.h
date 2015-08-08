@@ -3,7 +3,7 @@
 //  SilentCamera
 //
 //  Created by liuge on 11/27/14.
-//  Copyright (c) 2014 iLegendSoft. All rights reserved.
+//  Copyright (c) 2014 ZiXuWuYou. All rights reserved.
 //  Code from http://stackoverflow.com/questions/18736189/capture-images-in-the-background
 //  http://stackoverflow.com/questions/3662930/iphone-avfoundation-camera-orientation
 //  http://stackoverflow.com/questions/3662930/iphone-avfoundation-camera-orientation

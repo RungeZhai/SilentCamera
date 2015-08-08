@@ -3,15 +3,16 @@
 //  SilentCamera
 //
 //  Created by liuge on 7/1/15.
-//  Copyright (c) 2015 iLegendSoft. All rights reserved.
+//  Copyright (c) 2015 ZiXuWuYou. All rights reserved.
 //
 
-#import "QuietCamera.h"
 #import <AVFoundation/AVFoundation.h>
+#import "QuietCamera.h"
 
 @interface QuietCamera () <AVCaptureVideoDataOutputSampleBufferDelegate> {
     AVCaptureSession *_session;
     AVCaptureDevice *_device;
+    NSInteger _frameCount;
 }
 
 @end
@@ -41,6 +42,10 @@
     
     // Retrieve the selected camera
     _device = (_camera == kCameraFront) ? [[self class] frontCamera] : [[self class] backCamera];
+    //    [_device lockForConfiguration:nil];
+    //    _device.activeVideoMinFrameDuration = CMTimeMake(1, 5);
+    //    _device.activeVideoMaxFrameDuration = CMTimeMake(1, 5);
+    //    [_device unlockForConfiguration];
     
     // Create the capture input
     NSError *error;
@@ -52,14 +57,22 @@
     char *queueName = "com.ZiXuWuYou.tasks.grabFrames";
     dispatch_queue_t queue = dispatch_queue_create(queueName, NULL);
     
+    
+    // GeLiu_TODO: see http://www.phonesdevelopers.com/1713873/
     AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
+    NSDictionary *newSettings =
+    @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA) };
+    captureOutput.videoSettings = newSettings;
     captureOutput.alwaysDiscardsLateVideoFrames = YES;
     [captureOutput setSampleBufferDelegate:self queue:queue];
     
     // Create a session
     _session = [[AVCaptureSession alloc] init];
+    [_session beginConfiguration];
+    _session.sessionPreset = AVCaptureSessionPresetHigh;
     if ([_session canAddInput:captureInput]) [_session addInput:captureInput];
     if ([_session canAddOutput:captureOutput]) [_session addOutput:captureOutput];
+    [_session commitConfiguration];
 }
 
 - (void)takePhoto {
@@ -71,7 +84,16 @@
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-    if (_device.isAdjustingExposure || _device.isAdjustingWhiteBalance) return;
+    /**
+     * 第一个buffer进来的时候, _device的adjustingWhiteBalance等都还没来得及调整
+     * 所以, 判断这些属性是无效的, 解决方法是跳过前几个buffer再判断,
+     * 还有一个问题是adjustingExposure属性要等好长时间(3-9秒不等)才调整完
+     * 我们等不了那么长时间, 所以没有判断该属性, 只判断了whiteBalance
+     * 事实证明效果还可以, 时间控制在三秒内, 这是个折衷方案
+     */
+    if ((++_frameCount < 3) || (_device.isAdjustingWhiteBalance)) {
+        return;
+    }
     
     [_session stopRunning];
     for(AVCaptureInput *input in _session.inputs) {
