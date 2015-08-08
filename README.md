@@ -1,7 +1,7 @@
 SilentCamera
 ============
 
-Take photo in the background without showing preview.
+Take photo in the background without showing preview and sound.
 
 ### demo
 
