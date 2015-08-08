@@ -3,9 +3,12 @@ SilentCamera
 
 Take photo in the background without showing preview.
 
+### demo
 
+<img src="https://cloud.githubusercontent.com/assets/3366713/5217069/f991edea-7676-11e4-8360-17ea56a61f42.jpg" width=160 />
 
-Usage:
+### Usage
+
 There are 2 kinds of implementations.
 
 Implementation 1:
@@ -36,7 +39,3 @@ Implementation 2:
     
 
 Implementation 2 is absolutely no sound at all.
-
-![Alt][screenshot1_thumb]
-
-[screenshot1_thumb]: https://cloud.githubusercontent.com/assets/3366713/5217069/f991edea-7676-11e4-8360-17ea56a61f42.jpg
