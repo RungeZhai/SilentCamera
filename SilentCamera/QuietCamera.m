@@ -42,10 +42,14 @@
     
     // Retrieve the selected camera
     _device = (_camera == kCameraFront) ? [[self class] frontCamera] : [[self class] backCamera];
-    //    [_device lockForConfiguration:nil];
-    //    _device.activeVideoMinFrameDuration = CMTimeMake(1, 5);
-    //    _device.activeVideoMaxFrameDuration = CMTimeMake(1, 5);
-    //    [_device unlockForConfiguration];
+    
+    // Uncomment the following code if you want to throttle the output frame rate
+//    if ([_device lockForConfiguration:nil]) {
+//        _device.activeVideoMinFrameDuration = CMTimeMake(1, 30);
+//        _device.activeVideoMaxFrameDuration = CMTimeMake(1, 30);
+//        [_device unlockForConfiguration];
+//    }
+
     
     // Create the capture input
     NSError *error;
@@ -73,6 +77,10 @@
     if ([_session canAddInput:captureInput]) [_session addInput:captureInput];
     if ([_session canAddOutput:captureOutput]) [_session addOutput:captureOutput];
     [_session commitConfiguration];
+    
+    // fix the output orientation to portrait
+    AVCaptureConnection *conn = [captureOutput connectionWithMediaType:AVMediaTypeVideo];
+    conn.videoOrientation = AVCaptureVideoOrientationPortrait;
 }
 
 - (void)takePhoto {
@@ -82,8 +90,7 @@
 
 
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     /**
      * 第一个buffer进来的时候, _device的adjustingWhiteBalance等都还没来得及调整
      * 所以, 判断这些属性是无效的, 解决方法是跳过前几个buffer再判断,
@@ -114,9 +121,7 @@
         UIImage *image = nil;
         if (ciImage) {
             CGImageRef cgImage = [[CIContext contextWithOptions:nil] createCGImage:ciImage fromRect:ciImage.extent];
-            image = [UIImage imageWithCGImage:cgImage
-                                        scale:[UIScreen mainScreen].scale
-                                  orientation:[[self class] currentImageOrientation:_camera == 0]];
+            image = [UIImage imageWithCGImage:cgImage];
         }
         
         if (_captureReturnBlock) _captureReturnBlock(image);
@@ -124,8 +129,7 @@
 }
 
 
-+ (AVCaptureDevice *)backCamera
-{
++ (AVCaptureDevice *)backCamera {
     NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     for (AVCaptureDevice *device in videoDevices)
         if (device.position == AVCaptureDevicePositionBack) return device;
@@ -133,30 +137,12 @@
     return [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 }
 
-+ (AVCaptureDevice *)frontCamera
-{
++ (AVCaptureDevice *)frontCamera {
     NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     for (AVCaptureDevice *device in videoDevices)
         if (device.position == AVCaptureDevicePositionFront) return device;
     
     return [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-}
-
-+ (UIImageOrientation)currentImageOrientation:(BOOL)isUsingFrontCamera
-{
-    switch ([UIDevice currentDevice].orientation)
-    {
-        case UIDeviceOrientationPortrait:
-            return isUsingFrontCamera ? UIImageOrientationLeftMirrored : UIImageOrientationRight;
-        case UIDeviceOrientationPortraitUpsideDown:
-            return isUsingFrontCamera ? UIImageOrientationRightMirrored :UIImageOrientationLeft;
-        case UIDeviceOrientationLandscapeLeft:
-            return isUsingFrontCamera ? UIImageOrientationDownMirrored :  UIImageOrientationUp;
-        case UIDeviceOrientationLandscapeRight:
-            return isUsingFrontCamera ? UIImageOrientationUpMirrored :UIImageOrientationDown;
-        default:
-            return  UIImageOrientationUp;
-    }
 }
 
 @end
